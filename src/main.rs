@@ -17,29 +17,44 @@ fn main() -> ! {
     let mut ligado = false;
     let mut pressionado = false;
 
+    led.set_low();
+    led13.set_low();
+    led0.set_high();
+    led1.set_high();
+
     loop {
-        if button.is_high() && pressionado == false {
+        if button.is_high() && !pressionado {
             pressionado = true;
-            if ligado == false {
-                ligado = true;
-            } else {
-                ligado = false;
-            }
+            ligado = !ligado;
         }
 
-        if button.is_low() && pressionado == true {
+        if button.is_low() && pressionado {
             pressionado = false;
             led.set_low();
+            led13.set_low();
+            led0.set_high();
+            led1.set_high();
         }
 
-        if ligado == true {
+        if ligado && !pressionado {
             led.toggle();
             arduino_hal::delay_ms(200);
-            led13.toggle();
+            led.toggle();
+            arduino_hal::delay_ms(200);
+
+            led1.toggle();
+            arduino_hal::delay_ms(200);
+            led1.toggle();
+            arduino_hal::delay_ms(200);
+
+            led0.toggle();
             arduino_hal::delay_ms(200);
             led0.toggle();
             arduino_hal::delay_ms(200);
-            led1.toggle();
+
+            led13.toggle();
+            arduino_hal::delay_ms(200);
+            led13.toggle();
             arduino_hal::delay_ms(200);
         }
     }
